@@ -28,6 +28,8 @@ app.post("/api/notes", function(req, res) {
         
         var json = JSON.parse(data);
 
+        req.body["id"] = Math.floor(Math.random() * 100000000);
+
         json.push(req.body);
 
         fs.writeFile(path.join(__dirname, "db", "db.json"), JSON.stringify(json), function(err) {
