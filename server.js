@@ -30,7 +30,7 @@ app.post("/api/notes", function(req, res) {
 
         req.body["id"] = Math.floor(Math.random() * 100000000);
 
-        json.push(req.body);
+        json.push(res.body);
 
         fs.writeFile(path.join(__dirname, "db", "db.json"), JSON.stringify(json), function(err) {
             
@@ -42,6 +42,30 @@ app.post("/api/notes", function(req, res) {
         })
     })
 
+})
+
+app.delete("/api/notes/:id", function(req, res) {
+    
+    fs.readFile(path.join(__dirname, "db", "db.json"), function(err, data) {
+        
+        var json = JSON.parse(data);
+
+        for(i = 0; i < json.length; i++) {
+            if (json[i].id === parseInt(req.params.id)) {
+                json.splice(i, 1)
+
+                fs.writeFile(path.join(__dirname, "db", "db.json"), JSON.stringify(json), function(err) {
+            
+                    if (err) {
+                        console.log(err)
+                    }
+        
+                    console.log("NEW NOTE REMOVED")
+                })
+            }
+        }
+    })
+    
 })
 
 app.listen(PORT, () => console.log(`Server is listening on ${PORT}`))
